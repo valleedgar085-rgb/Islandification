@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Islandification – Notification Bar Customizer</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== Phone Preview ===== -->
+  <section class="preview-section">
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <!-- Dynamic Island -->
+        <div class="island" id="island">
+          <div class="island-default">
+            <span class="island-camera"></span>
+            <span class="island-sensor"></span>
+          </div>
+
+          <!-- Expanded: Incoming Call -->
+          <div class="island-call island-content hidden">
+            <div class="call-avatar">📞</div>
+            <div class="call-info">
+              <span class="call-name">Incoming Call</span>
+              <span class="call-sub">John Appleseed</span>
+            </div>
+            <div class="call-actions">
+              <button class="btn-decline" onclick="dismissIsland()">✕</button>
+              <button class="btn-accept" onclick="dismissIsland()">✔</button>
+            </div>
+          </div>
+
+          <!-- Expanded: Now Playing -->
+          <div class="island-music island-content hidden">
+            <div class="music-icon">🎵</div>
+            <div class="music-info">
+              <span class="music-title">Now Playing</span>
+              <span class="music-artist">Bohemian Rhapsody · Queen</span>
+            </div>
+            <div class="music-controls">
+              <button onclick="void(0)">⏮</button>
+              <button onclick="void(0)">⏸</button>
+              <button onclick="void(0)">⏭</button>
+            </div>
+          </div>
+
+          <!-- Expanded: Timer -->
+          <div class="island-timer island-content hidden">
+            <div class="timer-icon">⏱</div>
+            <div class="timer-info">
+              <span class="timer-label">Timer</span>
+              <span class="timer-value" id="timerValue">00:30</span>
+            </div>
+            <button class="timer-stop" onclick="dismissIsland()">Stop</button>
+          </div>
+
+          <!-- Expanded: Alert -->
+          <div class="island-alert island-content hidden">
+            <div class="alert-icon">🔔</div>
+            <div class="alert-info">
+              <span class="alert-title">Notification</span>
+              <span class="alert-body">You have a new message!</span>
+            </div>
+            <button class="alert-dismiss" onclick="dismissIsland()">✕</button>
+          </div>
+        </div>
+
+        <!-- Phone screen content -->
+        <div class="phone-home">
+          <div class="phone-time" id="phoneTime">9:41</div>
+          <div class="phone-date" id="phoneDate">Saturday, March 15</div>
+          <div class="app-grid">
+            <div class="app-icon" style="background:#4f8ef7">📷</div>
+            <div class="app-icon" style="background:#34c759">💬</div>
+            <div class="app-icon" style="background:#ff9500">🎵</div>
+            <div class="app-icon" style="background:#ff3b30">📧</div>
+            <div class="app-icon" style="background:#5856d6">📅</div>
+            <div class="app-icon" style="background:#007aff">🗺️</div>
+            <div class="app-icon" style="background:#af52de">📸</div>
+            <div class="app-icon" style="background:#32ade6">🌤️</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trigger Buttons -->
+    <div class="triggers">
+      <p class="triggers-label">Trigger Notification</p>
+      <button class="trigger-btn call-btn" onclick="showNotification('call')">📞 Incoming Call</button>
+      <button class="trigger-btn music-btn" onclick="showNotification('music')">🎵 Now Playing</button>
+      <button class="trigger-btn timer-btn" onclick="showNotification('timer')">⏱ Timer</button>
+      <button class="trigger-btn alert-btn" onclick="showNotification('alert')">🔔 Alert</button>
+    </div>
+  </section>
+
+  <!-- ===== Customizer Panel ===== -->
+  <aside class="customizer" id="customizer">
+    <header class="customizer-header">
+      <h1>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="7" y="9" width="10" height="6" rx="3" fill="currentColor"/>
+        </svg>
+        Islandification
+      </h1>
+      <p class="customizer-subtitle">Notification Bar Customizer</p>
+    </header>
+
+    <div class="customizer-body">
+
+      <!-- Shape -->
+      <div class="control-group">
+        <label class="control-label">Shape</label>
+        <div class="radio-group">
+          <label class="radio-option">
+            <input type="radio" name="shape" value="pill" checked onchange="applySettings()" />
+            <span class="radio-visual pill-preview"></span>
+            Pill
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="shape" value="rounded" onchange="applySettings()" />
+            <span class="radio-visual rounded-preview"></span>
+            Rounded
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="shape" value="sharp" onchange="applySettings()" />
+            <span class="radio-visual sharp-preview"></span>
+            Sharp
+          </label>
+        </div>
+      </div>
+
+      <!-- Color Theme -->
+      <div class="control-group">
+        <label class="control-label">Island Color</label>
+        <div class="color-swatches" id="colorSwatches">
+          <button class="swatch active" data-color="#000000" style="background:#000000" title="Black" onclick="setColor(this)"></button>
+          <button class="swatch" data-color="#1c1c1e" style="background:#1c1c1e" title="Dark" onclick="setColor(this)"></button>
+          <button class="swatch" data-color="#1a1a2e" style="background:#1a1a2e" title="Midnight" onclick="setColor(this)"></button>
+          <button class="swatch" data-color="#0f3460" style="background:#0f3460" title="Navy" onclick="setColor(this)"></button>
+          <button class="swatch" data-color="#16213e" style="background:#16213e" title="Deep Blue" onclick="setColor(this)"></button>
+          <button class="swatch" data-color="#2d6a4f" style="background:#2d6a4f" title="Forest" onclick="setColor(this)"></button>
+          <button class="swatch" data-color="#6d2b3d" style="background:#6d2b3d" title="Wine" onclick="setColor(this)"></button>
+          <button class="swatch custom-swatch" title="Custom color">
+            <input type="color" id="customColor" value="#000000" oninput="setCustomColor(this.value)" />
+            🎨
+          </button>
+        </div>
+      </div>
+
+      <!-- Text Color -->
+      <div class="control-group">
+        <label class="control-label">Text &amp; Icon Color</label>
+        <div class="color-swatches">
+          <button class="swatch active" data-textcolor="#ffffff" style="background:#ffffff;border:2px solid #ccc" title="White" onclick="setTextColor(this)"></button>
+          <button class="swatch" data-textcolor="#f0f0f0" style="background:#f0f0f0;border:2px solid #ccc" title="Off White" onclick="setTextColor(this)"></button>
+          <button class="swatch" data-textcolor="#ffd700" style="background:#ffd700" title="Gold" onclick="setTextColor(this)"></button>
+          <button class="swatch" data-textcolor="#00d4ff" style="background:#00d4ff" title="Cyan" onclick="setTextColor(this)"></button>
+          <button class="swatch" data-textcolor="#ff6b6b" style="background:#ff6b6b" title="Coral" onclick="setTextColor(this)"></button>
+          <button class="swatch custom-swatch" data-swatch-type="textcolor" title="Custom text color">
+            <input type="color" id="customTextColor" value="#ffffff" oninput="setCustomTextColor(this.value)" />
+            🎨
+          </button>
+        </div>
+      </div>
+
+      <!-- Size -->
+      <div class="control-group">
+        <label class="control-label">
+          Island Size
+          <span class="value-badge" id="sizeValue">1.0×</span>
+        </label>
+        <input type="range" id="sizeSlider" min="0.7" max="1.5" step="0.05" value="1.0"
+               class="slider" oninput="applySettings()" />
+      </div>
+
+      <!-- Blur / Glass -->
+      <div class="control-group">
+        <label class="control-label">
+          Background Blur
+          <span class="value-badge" id="blurValue">0px</span>
+        </label>
+        <input type="range" id="blurSlider" min="0" max="20" step="1" value="0"
+               class="slider" oninput="applySettings()" />
+      </div>
+
+      <!-- Animation -->
+      <div class="control-group">
+        <label class="control-label">Expand Animation</label>
+        <select id="animSelect" class="select-control" onchange="applySettings()">
+          <option value="spring">🌀 Spring Bounce</option>
+          <option value="smooth">✨ Smooth Ease</option>
+          <option value="snappy">⚡ Snappy</option>
+          <option value="elastic">🔁 Elastic</option>
+          <option value="none">— None</option>
+        </select>
+      </div>
+
+      <!-- Shadow -->
+      <div class="control-group">
+        <label class="control-label">Glow / Shadow</label>
+        <div class="toggle-group">
+          <label class="toggle-option">
+            <input type="radio" name="shadow" value="none" checked onchange="applySettings()" /> None
+          </label>
+          <label class="toggle-option">
+            <input type="radio" name="shadow" value="subtle" onchange="applySettings()" /> Subtle
+          </label>
+          <label class="toggle-option">
+            <input type="radio" name="shadow" value="glow" onchange="applySettings()" /> Glow
+          </label>
+          <label class="toggle-option">
+            <input type="radio" name="shadow" value="intense" onchange="applySettings()" /> Intense
+          </label>
+        </div>
+      </div>
+
+      <!-- Opacity -->
+      <div class="control-group">
+        <label class="control-label">
+          Opacity
+          <span class="value-badge" id="opacityValue">100%</span>
+        </label>
+        <input type="range" id="opacitySlider" min="40" max="100" step="1" value="100"
+               class="slider" oninput="applySettings()" />
+      </div>
+
+      <!-- Border -->
+      <div class="control-group">
+        <label class="control-label">Border</label>
+        <div class="toggle-group">
+          <label class="toggle-option">
+            <input type="radio" name="border" value="none" checked onchange="applySettings()" /> None
+          </label>
+          <label class="toggle-option">
+            <input type="radio" name="border" value="thin" onchange="applySettings()" /> Thin
+          </label>
+          <label class="toggle-option">
+            <input type="radio" name="border" value="medium" onchange="applySettings()" /> Medium
+          </label>
+          <label class="toggle-option">
+            <input type="radio" name="border" value="glow" onchange="applySettings()" /> Glow
+          </label>
+        </div>
+      </div>
+
+      <!-- Border Color (shown when border != none) -->
+      <div class="control-group" id="borderColorGroup" style="display:none">
+        <label class="control-label">Border Color</label>
+        <input type="color" id="borderColor" value="#ffffff" class="color-input" oninput="applySettings()" />
+      </div>
+
+      <!-- Preset Themes -->
+      <div class="control-group">
+        <label class="control-label">Presets</label>
+        <div class="presets-grid">
+          <button class="preset-btn" onclick="applyPreset('classic')" title="Classic Black">
+            <span class="preset-swatch" style="background:#000"></span> Classic
+          </button>
+          <button class="preset-btn" onclick="applyPreset('midnight')" title="Midnight Blue">
+            <span class="preset-swatch" style="background:linear-gradient(135deg,#1a1a2e,#0f3460)"></span> Midnight
+          </button>
+          <button class="preset-btn" onclick="applyPreset('forest')" title="Forest">
+            <span class="preset-swatch" style="background:linear-gradient(135deg,#1b4332,#2d6a4f)"></span> Forest
+          </button>
+          <button class="preset-btn" onclick="applyPreset('neon')" title="Neon">
+            <span class="preset-swatch" style="background:#0a0a0a"></span> Neon
+          </button>
+          <button class="preset-btn" onclick="applyPreset('glass')" title="Glass">
+            <span class="preset-swatch" style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3)"></span> Glass
+          </button>
+          <button class="preset-btn" onclick="applyPreset('royal')" title="Royal">
+            <span class="preset-swatch" style="background:linear-gradient(135deg,#2c0954,#6d2b9e)"></span> Royal
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <footer class="customizer-footer">
+      <button class="btn-save" onclick="saveSettings()">💾 Save Settings</button>
+      <button class="btn-reset" onclick="resetSettings()">↺ Reset</button>
+      <p class="saved-indicator" id="savedIndicator"></p>
+    </footer>
+  </aside>
+
+  <script src="script.js"></script>
+</body>
+</html>
